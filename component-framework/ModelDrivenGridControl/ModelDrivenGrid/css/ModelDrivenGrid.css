@@ -6,3 +6,26 @@
     /* Large Icon */
     font-size: 300%; 
 }
+
+
+.ms-DetailsRow {
+    font-size: 14px;
+}
+
+ms-DetailsRow-cell 
+
+/* vertical center checkbox */
+.ms-DetailsRow-check {
+    height: 100%;
+}
+
+/* checkbox hover cursor pointer */
+.ms-DetailsRow-check:hover {
+    cursor: pointer;
+}
+
+/* underline whole row when hovering text - not working
+.ms-DetailsRow a:hover ~ * {
+    text-decoration: underline;
+}
+*/

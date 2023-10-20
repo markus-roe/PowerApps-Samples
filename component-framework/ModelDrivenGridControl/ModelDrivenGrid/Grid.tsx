@@ -62,16 +62,6 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (props, defa
     return null;
 };
 
-const onRenderItemColumn = (
-    item?: ComponentFramework.PropertyHelper.DataSetApi.EntityRecord,
-    index?: number,
-    column?: IColumn,
-) => {
-    if (column && column.fieldName && item) {
-        return <>{item?.getFormattedValue(column.fieldName)}</>;
-    }
-    return <></>;
-};
 
 export const Grid = React.memo((props: GridProps) => {
     const {
@@ -100,6 +90,24 @@ export const Grid = React.memo((props: GridProps) => {
         highlightColor,
         totalResultCount,
     } = props;
+
+    const onRenderItemColumn = (
+        item?: ComponentFramework.PropertyHelper.DataSetApi.EntityRecord,
+        index?: number,
+        column?: IColumn,
+    ) => {
+        if (column && column.fieldName && item) {
+            if (column.name == "Bild") {
+                return <img src={`data:image/png;base64,${item?.getFormattedValue(column.fieldName)}`} alt="Thumbnail" style={{ maxWidth: '75px' }} />;
+            }
+            return (
+                <Link onClick={() => onNavigate(item)}>
+                    {item?.getFormattedValue(column.fieldName)}
+                </Link>
+            );
+        }
+        return <></>;
+    };
 
     const forceUpdate = useForceUpdate();
     const onSelectionChanged = React.useCallback(() => {
@@ -270,7 +278,10 @@ export const Grid = React.memo((props: GridProps) => {
             if (highlightColor && highlightValue && item?.getValue('HighlightIndicator') == highlightValue) {
                 customStyles.root = { backgroundColor: highlightColor };
             }
-            return <DetailsRow {...props} styles={customStyles} />;
+
+            customStyles.cell = { fontSize: '14px', display: 'flex', alignItems: 'center', height: '100%' };
+
+            return <DetailsRow {...props} styles={customStyles} className='detailsRow' />;
         }
 
         return null;
@@ -302,7 +313,7 @@ export const Grid = React.memo((props: GridProps) => {
                     ></DetailsList>
                     {contextualMenuProps && <ContextualMenu {...contextualMenuProps} />}
                 </ScrollablePane>
-                {(itemsLoading || isComponentLoading) && <Overlay />}
+                {/* {(itemsLoading || isComponentLoading) && <Overlay />} */}
             </Stack.Item>
             <Stack.Item>
                 <Stack horizontal style={{ width: '100%', paddingLeft: 8, paddingRight: 8 }}>

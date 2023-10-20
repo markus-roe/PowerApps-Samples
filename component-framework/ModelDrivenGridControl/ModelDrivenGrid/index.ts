@@ -98,7 +98,10 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
         this.context.mode.trackContainerResize(true);
         this.resources = this.context.resources;
         this.isTestHarness = document.getElementById('control-dimensions') !== null;
+
+        this.context.parameters.records.loading = true;
     }
+
 
     /**
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
@@ -125,10 +128,11 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
             this.currentPage = 1;
         }
 
-        if (resetPaging || datasetChanged || this.isTestHarness) {
+        if (resetPaging || datasetChanged || this.isTestHarness || !this.records) {
             this.records = dataset.records;
             this.sortedRecordsIds = dataset.sortedRecordIds;
         }
+
 
         // The test harness provides width/height as strings
         const allocatedWidth = parseInt(context.mode.allocatedWidth as unknown as string);
