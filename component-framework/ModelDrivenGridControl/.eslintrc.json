@@ -3,7 +3,10 @@
         "browser": true,
         "es2021": true
     },
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "globals": {
         "ComponentFramework": true
     },
@@ -12,8 +15,12 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": ["@microsoft/power-apps", "@typescript-eslint"],
+    "plugins": [
+        "@microsoft/power-apps",
+        "@typescript-eslint"
+    ],
     "rules": {
-        "no-unused-vars": "off"
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-empty-interface": "off"
     }
 }
