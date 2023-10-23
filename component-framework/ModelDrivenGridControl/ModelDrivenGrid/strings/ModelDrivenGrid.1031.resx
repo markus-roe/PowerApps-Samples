@@ -174,10 +174,6 @@ object]</value>
     <value>Enthält keine Daten</value>
     <comment/>
   </data>
-  <data name="Label_ShowFullScreen" xml:space="preserve">
-    <value>Vollbild anzeigen</value>
-    <comment/>
-  </data>
   <data name="Label_Grid_Footer_RecordCount" xml:space="preserve">
     <value>{0} Datensätze ({1} ausgewählt)</value>
     <comment/>

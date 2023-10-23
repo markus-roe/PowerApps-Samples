@@ -18,7 +18,6 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
         [id: string]: ComponentFramework.PropertyHelper.DataSetApi.EntityRecord;
     };
     currentPage = 1;
-    isFullScreen = false;
 
     setSelectedRecords = (ids: string[]): void => {
         this.context.parameters.records.setSelectedRecordIds(ids);
@@ -74,9 +73,7 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
         this.context.parameters.records.paging.loadExactPage(this.currentPage);
     };
 
-    onFullScreen = (): void => {
-        this.context.mode.setFullScreen(true);
-    };
+
 
     /**
      * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
@@ -117,13 +114,6 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
         const resetPaging =
             datasetChanged && !dataset.loading && !dataset.paging.hasPreviousPage && this.currentPage !== 1;
 
-        if (context.updatedProperties.indexOf('fullscreen_close') > -1) {
-            this.isFullScreen = false;
-        }
-        if (context.updatedProperties.indexOf('fullscreen_open') > -1) {
-            this.isFullScreen = true;
-        }
-
         if (resetPaging) {
             this.currentPage = 1;
         }
@@ -136,17 +126,12 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
 
         // The test harness provides width/height as strings
         const allocatedWidth = parseInt(context.mode.allocatedWidth as unknown as string);
-        let allocatedHeight = parseInt(context.mode.allocatedHeight as unknown as string);
 
-        // For MDA subgrid support when running on mobile/narrow formfactor
-        if (!this.isFullScreen && context.parameters.SubGridHeight.raw) {
-            allocatedHeight = context.parameters.SubGridHeight.raw;
-        }
+
 
         ReactDOM.render(
             React.createElement(Grid, {
                 width: allocatedWidth,
-                height: allocatedHeight,
                 columns: dataset.columns,
                 records: this.records,
                 sortedRecordIds: this.sortedRecordsIds,
@@ -158,8 +143,6 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
                 filtering: dataset.filtering && dataset.filtering.getFilter(),
                 resources: this.resources,
                 itemsLoading: dataset.loading,
-                highlightValue: this.context.parameters.HighlightValue.raw,
-                highlightColor: this.context.parameters.HighlightColor.raw,
                 setSelectedRecords: this.setSelectedRecords,
                 onNavigate: this.onNavigate,
                 onSort: this.onSort,
@@ -167,8 +150,6 @@ export class ModelDrivenGrid implements ComponentFramework.StandardControl<IInpu
                 loadFirstPage: this.loadFirstPage,
                 loadNextPage: this.loadNextPage,
                 loadPreviousPage: this.loadPreviousPage,
-                isFullScreen: this.isFullScreen,
-                onFullScreen: this.onFullScreen,
             }),
             this.container,
         );

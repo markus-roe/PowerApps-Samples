@@ -12,7 +12,10 @@
     font-size: 14px;
 }
 
-ms-DetailsRow-cell 
+.rowItem {
+    color: black !important;
+  }
+
 
 /* vertical center checkbox */
 .ms-DetailsRow-check {

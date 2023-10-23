@@ -36,8 +36,6 @@ export interface GridProps {
     filtering: ComponentFramework.PropertyHelper.DataSetApi.FilterExpression;
     resources: ComponentFramework.Resources;
     itemsLoading: boolean;
-    highlightValue: string | null;
-    highlightColor: string | null;
     setSelectedRecords: (ids: string[]) => void;
     onNavigate: (item?: ComponentFramework.PropertyHelper.DataSetApi.EntityRecord) => void;
     onSort: (name: string, desc: boolean) => void;
@@ -45,8 +43,6 @@ export interface GridProps {
     loadFirstPage: () => void;
     loadNextPage: () => void;
     loadPreviousPage: () => void;
-    onFullScreen: () => void;
-    isFullScreen: boolean;
 }
 
 const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (props, defaultRender) => {
@@ -84,10 +80,6 @@ export const Grid = React.memo((props: GridProps) => {
         loadFirstPage,
         loadNextPage,
         loadPreviousPage,
-        onFullScreen,
-        isFullScreen,
-        highlightValue,
-        highlightColor,
         totalResultCount,
     } = props;
 
@@ -97,14 +89,18 @@ export const Grid = React.memo((props: GridProps) => {
         column?: IColumn,
     ) => {
         if (column && column.fieldName && item) {
-            if (column.name == "Bild") {
-                return <img src={`data:image/png;base64,${item?.getFormattedValue(column.fieldName)}`} alt="Thumbnail" style={{ maxWidth: '75px' }} />;
-            }
+            // console.log(column.fieldName, column)
             return (
-                <Link onClick={() => onNavigate(item)}>
-                    {item?.getFormattedValue(column.fieldName)}
-                </Link>
-            );
+                (column.data.dataType == "Image") ?
+
+                    (<Link onClick={() => onNavigate(item)}>
+                        <img src={`data:image/png;base64,${item?.getFormattedValue(column.fieldName)}`} alt="Thumbnail" style={{ maxWidth: '75px' }} />
+                    </Link>)
+                    :
+                    (<Link onClick={() => onNavigate(item)} className='rowItem'>
+                        {item?.getFormattedValue(column.fieldName)}
+                    </Link>)
+            )
         }
         return <></>;
     };
@@ -273,11 +269,6 @@ export const Grid = React.memo((props: GridProps) => {
         const customStyles: Partial<IDetailsRowStyles> = {};
 
         if (props && props.item) {
-            const item = props.item as DataSet | undefined;
-
-            if (highlightColor && highlightValue && item?.getValue('HighlightIndicator') == highlightValue) {
-                customStyles.root = { backgroundColor: highlightColor };
-            }
 
             customStyles.cell = { fontSize: '14px', display: 'flex', alignItems: 'center', height: '100%' };
 
@@ -325,9 +316,7 @@ export const Grid = React.memo((props: GridProps) => {
                         )}
                     </Stack.Item>
                     <Stack.Item grow align="center" style={{ textAlign: 'center' }}>
-                        {!isFullScreen && (
-                            <Link onClick={onFullScreen}>{resources.getString('Label_ShowFullScreen')}</Link>
-                        )}
+                        <></>
                     </Stack.Item>
                     <IconButton
                         alt="First Page"
